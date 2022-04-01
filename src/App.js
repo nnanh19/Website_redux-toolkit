@@ -1,56 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import {
+  Routes,
+  Route,
+} from "react-router-dom";
+import SiteLayout from './components/layout/siteLayout';
+import HomePage from './components/pages/site/homepage';
+import ProductPage from './components/pages/site/product';
+import Detail from './components/pages/site/product/detail';
+import AdminLayout from './components/layout/adminLayout';
+import DashboardPage from './components/pages/admin/dashboard';
+import ProductPageManager from './components/pages/admin/product';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Routes>
+          <Route path='/' element={<SiteLayout />}>
+              <Route index element={<HomePage />}/>
+              <Route path="product">
+                <Route index element={<ProductPage />}/>
+                <Route path='detail'  element={<Detail />}/>
+              </Route>
+          </Route>
+          <Route path='/admin' element={<AdminLayout />}>
+              <Route index  element={<DashboardPage />}/>
+              <Route path="product" element={<ProductPageManager />}/>
+          </Route>
+      </Routes>
     </div>
   );
 }
