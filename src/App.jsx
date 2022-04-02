@@ -13,6 +13,7 @@ import AdminLayout from './components/layout/adminLayout';
 import DashboardPage from './components/pages/admin/dashboard';
 import ProductPageManager from './components/pages/admin/product';
 import NewProductPageManager from './components/pages/admin/product/new';
+import EditProductManager from './components/pages/admin/product/edit';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route index  element={<DashboardPage />}/>
               <Route path="product" element={<ProductPageManager />}/>
               <Route path="product/new" element={<NewProductPageManager /> }/>
+              <Route path="product/:id/edit" element={<EditProductManager /> }/>
           </Route>
       </Routes>
     </div>

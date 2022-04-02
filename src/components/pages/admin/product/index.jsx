@@ -5,9 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import {  getProducts, removeProduct } from './productSlice';
 import { Button, Table } from 'antd';
 import { Typography} from 'antd';
+import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 
 function ProductPageManager() {
+  const navigate = useNavigate();
   const products = useSelector(data => data.product.value);
   const dispatch = useDispatch();
 
@@ -56,7 +58,7 @@ function ProductPageManager() {
       sale : product.sale,
       func : [
         <div className="site-button-ghost-wrapper" key={index}>
-          <Button type="primary" ghost >
+          <Button type="primary" ghost onClick={()=> navigate(`/admin/product/${product._id}/edit`)}>
             Sửa
           </Button>,
               <Button type="primary" danger ghost onClick={()=> dispatch(removeProduct(product._id))}>
