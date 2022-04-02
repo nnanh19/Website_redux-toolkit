@@ -12,6 +12,7 @@ import Detail from './components/pages/site/product/detail';
 import AdminLayout from './components/layout/adminLayout';
 import DashboardPage from './components/pages/admin/dashboard';
 import ProductPageManager from './components/pages/admin/product';
+import NewProductPageManager from './components/pages/admin/product/new';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/admin' element={<AdminLayout />}>
               <Route index  element={<DashboardPage />}/>
               <Route path="product" element={<ProductPageManager />}/>
+              <Route path="product/new" element={<NewProductPageManager /> }/>
           </Route>
       </Routes>
     </div>

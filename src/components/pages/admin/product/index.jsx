@@ -1,8 +1,11 @@
-import { Breadcrumb } from 'antd'
+import { Breadcrumb } from 'antd';
+import '../../../../App.css';
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {  getProducts } from './productSlice';
 import { Button, Table } from 'antd';
+import { Typography} from 'antd';
+const { Title } = Typography;
 
 function ProductPageManager() {
   const products = useSelector(data => data.product.value);
@@ -56,7 +59,6 @@ function ProductPageManager() {
           <Button type="primary" ghost >
             Sửa
           </Button>,
-
               <Button type="primary" danger ghost>
             Xóa
           </Button>
@@ -71,9 +73,9 @@ function ProductPageManager() {
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-          
-
-        <Table dataSource={listProduct} columns={columns} />;
+          <Title>Danh sách sản phẩm</Title>
+          <h3 className="title-feat"><a href="/admin/product/new">Thêm mới</a></h3>
+          <Table dataSource={listProduct} columns={columns} />;
         </div>
     </>
   )
