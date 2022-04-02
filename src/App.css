@@ -40,3 +40,6 @@
 .title-feat{
   text-align: left;
 }
+.option-hidden{
+  display: none;
+}
