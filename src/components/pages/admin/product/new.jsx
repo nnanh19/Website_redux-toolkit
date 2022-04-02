@@ -21,7 +21,7 @@ const NewProductPageManager = () => {
 
   useEffect(()=> {
     dispatch(getCategories());
-  } , [])
+  } , [dispatch])
 
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState('horizontal');

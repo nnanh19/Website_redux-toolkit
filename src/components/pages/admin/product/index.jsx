@@ -2,7 +2,7 @@ import { Breadcrumb } from 'antd';
 import '../../../../App.css';
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import {  getProducts } from './productSlice';
+import {  getProducts, removeProduct } from './productSlice';
 import { Button, Table } from 'antd';
 import { Typography} from 'antd';
 const { Title } = Typography;
@@ -13,7 +13,7 @@ function ProductPageManager() {
 
   useEffect(()=> {
     dispatch(getProducts());
-  } , [])
+  } , [dispatch])
 
   const columns = [
     {
@@ -59,7 +59,7 @@ function ProductPageManager() {
           <Button type="primary" ghost >
             Sửa
           </Button>,
-              <Button type="primary" danger ghost>
+              <Button type="primary" danger ghost onClick={()=> dispatch(removeProduct(product._id))}>
             Xóa
           </Button>
         </div>
@@ -75,7 +75,7 @@ function ProductPageManager() {
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
           <Title>Danh sách sản phẩm</Title>
           <h3 className="title-feat"><a href="/admin/product/new">Thêm mới</a></h3>
-          <Table dataSource={listProduct} columns={columns} />;
+          <Table dataSource={listProduct} columns={columns} />
         </div>
     </>
   )
