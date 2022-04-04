@@ -18,9 +18,8 @@ const EditProductManager = () => {
   const { register, handleSubmit , reset } = useForm();
   const onSubmit = data =>{
     dispatch(updateProduct(data))
-    .then(()=>{
-      navigate("/admin/product" );
-    })
+    .then(()=>  navigate("/admin/product" )
+    )
   }
   const {id} = useParams();
 
