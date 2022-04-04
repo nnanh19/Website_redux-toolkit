@@ -14,6 +14,8 @@ import DashboardPage from './components/pages/admin/dashboard';
 import ProductPageManager from './components/pages/admin/product';
 import NewProductPageManager from './components/pages/admin/product/new';
 import EditProductManager from './components/pages/admin/product/edit';
+import SignUpPageAdmin from './components/pages/admin/auth/signup';
+import SignInPageAdmin from './components/pages/admin/auth/signin';
 
 function App() {
   return (
@@ -31,6 +33,10 @@ function App() {
               <Route path="product" element={<ProductPageManager />}/>
               <Route path="product/new" element={<NewProductPageManager /> }/>
               <Route path="product/:id/edit" element={<EditProductManager /> }/>
+
+              <Route path="signup" element={<SignUpPageAdmin /> }/>
+              <Route path="signin" element={<SignInPageAdmin /> }/>
+
           </Route>
       </Routes>
     </div>

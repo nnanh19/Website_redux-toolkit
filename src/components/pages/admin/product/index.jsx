@@ -10,9 +10,9 @@ const { Title } = Typography;
 
 function ProductPageManager() {
   const navigate = useNavigate();
-  const products = useSelector(data => data.product.value);
   const dispatch = useDispatch();
 
+  const products = useSelector(data => data.product.value);
   useEffect(()=> {
     dispatch(getProducts());
   } , [dispatch])
@@ -47,7 +47,7 @@ function ProductPageManager() {
       dataIndex : 'func',
     }
   ];
- 
+
   const listProduct = products?.map((product, index)=>{
     return {
       key: index,

@@ -90,14 +90,14 @@ const NewProductPageManager = () => {
                         placeholder="Nhập mô tả sản phẩm vào đây ...">
               </textarea>
             </Form.Item>
-            <Form.Item label="Chọn loại hàng" rules={[{ required: true }]}>
+            {/* <Form.Item label="Chọn loại hàng" rules={[{ required: true }]}>
               <select className='ant-input' {...register('category')}>
                 {categories?.map((category,index)=> 
                 <option key={index} value={category._id} 
                         className='ant-input' >{category.name}
                 </option>)}
               </select>
-            </Form.Item>
+            </Form.Item> */}
             
             <Form.Item {...buttonItemLayout}>
               <button className='ant-btn ant-btn-primary'>Đồng ý</button>

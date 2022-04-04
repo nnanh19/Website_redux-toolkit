@@ -1,5 +1,5 @@
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
-import { add, list, read, remove } from "../../../../api/product";
+import { add, list, read, remove, update } from "../../../../api/product";
 
 export const getProducts = createAsyncThunk(
     "product/getProducts",
@@ -13,6 +13,15 @@ export const addProducts = createAsyncThunk(
     "product/addProducts",
     async (product) => {
         add(product);
+    }
+)
+
+export const updateProduct = createAsyncThunk (
+    "product/addProducts",
+    async (product) => {
+        update(product); 
+        const {data} = await list();
+        return data;
     }
 )
 
@@ -42,13 +51,20 @@ const ProductSlice = createSlice({
     extraReducers : (builder) =>{
         builder.addCase(getProducts.fulfilled , (state , action) => {
             state.value = action.payload;
+            console.log('products');
         } );
         builder.addCase(removeProduct.fulfilled , (state, action) =>{
             state.value = action.payload;
         })
         builder.addCase(detailProduct.fulfilled, (state, action) => {
             state.value = action.payload;
+            console.log('detproduct',action.payload);
         })
+        builder.addCase(updateProduct.fulfilled, (state, action) => {
+            state.value = action.payload;
+            console.log('update',state.value);
+        })
+        
     }
 });
 

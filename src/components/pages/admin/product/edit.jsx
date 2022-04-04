@@ -3,19 +3,24 @@ import React, { useEffect } from 'react'
 import { Typography} from 'antd';
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts, detailProduct } from './productSlice';
+import { detailProduct, updateProduct } from './productSlice';
 import { Form } from 'antd';
 import { useState } from 'react';
 import { getCategories } from '../category/categorySlice';
 import '../../../../App.css'
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 
 const EditProductManager = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit , reset } = useForm();
   const onSubmit = data =>{
-    dispatch(addProducts(data));
+    dispatch(updateProduct(data))
+    .then(()=>{
+      navigate("/admin/product" );
+    })
   }
   const {id} = useParams();
 
@@ -103,7 +108,7 @@ const EditProductManager = () => {
               </textarea>
             </Form.Item>
             <Form.Item label="Chọn loại hàng" rules={[{ required: true }]}>
-              <select className='ant-input' {...register('category')}>
+              <select className='ant-input' >
                 {categories?.map((category,index)=> 
                 <option key={index} value={category._id} 
                         className='ant-input' >{category.name}
