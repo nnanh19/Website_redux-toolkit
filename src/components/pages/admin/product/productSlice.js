@@ -47,6 +47,7 @@ const ProductSlice = createSlice({
     "name" : "product",
     initialState : {
         value : [],
+        detail : [],
     },
     extraReducers : (builder) =>{
         builder.addCase(getProducts.fulfilled , (state , action) => {
@@ -57,7 +58,7 @@ const ProductSlice = createSlice({
             state.value = action.payload;
         })
         builder.addCase(detailProduct.fulfilled, (state, action) => {
-            state.value = action.payload;
+            state.detail = action.payload;
             console.log('detproduct',action.payload);
         })
         builder.addCase(updateProduct.fulfilled, (state, action) => {

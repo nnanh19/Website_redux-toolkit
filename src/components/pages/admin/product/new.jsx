@@ -18,7 +18,7 @@ const NewProductPageManager = () => {
   }
   
   const categories = useSelector(data => data.category.value);
-
+  
   useEffect(()=> {
     dispatch(getCategories());
   } , [dispatch])

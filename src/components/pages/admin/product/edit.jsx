@@ -108,7 +108,7 @@ const EditProductManager = () => {
             </Form.Item>
             <Form.Item label="Chọn loại hàng" rules={[{ required: true }]}>
               <select className='ant-input' >
-                {categories?.map((category,index)=> 
+                {categories.categoryList?.map((category,index)=> 
                 <option key={index} value={category._id} 
                         className='ant-input' >{category.name}
                 </option>)}
