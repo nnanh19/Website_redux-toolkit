@@ -19,6 +19,8 @@ import SignInPageAdmin from './components/pages/admin/auth/signin';
 import { PrivateRouteIsAdmin, PrivateRouteIsAuth } from './utils/localStorage';
 import SignInPageSite from './components/pages/site/auth/signin';
 import SignUpPageSite from './components/pages/site/auth/signup';
+import CategoryPageManager from './components/pages/admin/category';
+import SubCategoryPageManager from './components/pages/admin/category/subCate';
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
                   </PrivateRouteIsAdmin>
                 </PrivateRouteIsAuth>}
               />
+              {/* product */}
               <Route path="product" element=
               {
                 <PrivateRouteIsAuth>
@@ -63,6 +66,22 @@ function App() {
                 </PrivateRouteIsAdmin>
                 </PrivateRouteIsAuth>
               }/>
+              {/* category */}
+              <Route path="category" element={
+                <PrivateRouteIsAuth>
+                <PrivateRouteIsAdmin>
+                  <CategoryPageManager />
+                </PrivateRouteIsAdmin>
+                </PrivateRouteIsAuth>
+              }/>
+              <Route path="category/:id" element={
+                <PrivateRouteIsAuth>
+                <PrivateRouteIsAdmin>
+                  <SubCategoryPageManager />
+                </PrivateRouteIsAdmin>
+                </PrivateRouteIsAuth>
+              }/>
+
               <Route path="signup" element={<SignUpPageAdmin /> }/>
               <Route path="signin" element={<SignInPageAdmin /> }/>
           </Route>

@@ -1,9 +1,7 @@
 import React from 'react'
 import { Layout, Menu } from 'antd';
 import {
-
     FileOutlined,
-    TeamOutlined,
     UserOutlined,
   } from '@ant-design/icons';
   
@@ -26,12 +24,18 @@ const NavAdmin = () => {
             <Menu.Item key="4">Bill</Menu.Item>
             <Menu.Item key="5">Alex</Menu.Item>
         </SubMenu>
-        <SubMenu key="sub2" icon={<TeamOutlined />} title="Product">
+        {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Product">
             <Menu.Item key="7"><a href="/admin/product">Danh sách</a></Menu.Item>
             <Menu.Item key="6"><a href="/admin/product/new">Thêm mới</a></Menu.Item>
-        </SubMenu>
+        </SubMenu> */}
+        <Menu.Item key="10" icon={<FileOutlined />}>
+            <a href="/admin/product">Người Dùng</a>
+        </Menu.Item>
+        <Menu.Item key="8" icon={<FileOutlined />}>
+            <a href="/admin/product">Sản Phẩm</a>
+        </Menu.Item>
         <Menu.Item key="9" icon={<FileOutlined />}>
-            Files
+            <a href="/admin/category">Danh Mục SP</a>
         </Menu.Item>
         </Menu>
     </Sider>
