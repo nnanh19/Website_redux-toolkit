@@ -1,87 +1,140 @@
-import { Menu } from 'antd';
-import React, { useEffect } from 'react'
-import { Typography } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
-import { getCategories } from '../../admin/category/categorySlice';
-import { getProducts } from '../../admin/product/productSlice';
-import { useNavigate } from 'react-router-dom';
+import { Menu } from "antd";
+import React, { useEffect } from "react";
+import { Typography } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { getCategories } from "../../admin/category/categorySlice";
+import {
+  getProducts,
+  getProductsByCategory,
+} from "../../admin/product/productSlice";
+import { useNavigate } from "react-router-dom";
+import { numberFormat } from "../../../../utils/numberFormat";
+
+//IONICON
+import { CartOutline, HeartOutline, LinkOutline } from "react-ionicons";
+
 const { SubMenu } = Menu;
-const {Title} = Typography;
+const { Title } = Typography;
 
 const ProductPage = () => {
   const navigate = useNavigate();
-  const handleClick = e => {
-    console.log('click ', e);
-  };
-  const categories = useSelector(data => data.category.value);
-  const dispatch = useDispatch();
-  useEffect(()=> {
-    dispatch(getCategories());
-  } , [dispatch])
 
-  const products = useSelector(data => data.product.value);
-  console.log('pr',products);
+  const categories = useSelector((data) => data.category.value);
+
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProducts());
-  } , [dispatch])
+    dispatch(getCategories());
+  }, [dispatch]);
+
+  const products = useSelector((data) => data.product.value);
+  let params = new URL(document.location).searchParams;
+  const q_limit = params.get("limit");
+  useEffect(() => {
+    dispatch(getProducts(q_limit));
+  }, [dispatch, q_limit]);
+
+  const handleClick = (e) => {
+    console.log('ev,',e);
+    dispatch(getProductsByCategory(e.key));
+  };
+  console.log('cate',categories.categoryList);
   return (
-    
-    <div className='container-product'>
-      <div>
-        <div>
-          <Title level={2} >Danh mục</Title>
+    <div className="container-product">
+      <div className="category-product">
+        <div >
+          <Title level={2}>Danh mục</Title>
         </div>
-        
-        {categories.categoryList?.map((category , index) => {
+
+        {categories.categoryList?.map((category, index) => {
           return (
             <Menu
               onClick={handleClick}
               style={{ width: 256 }}
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              mode="inline"  key={index}
+              defaultSelectedKeys={["1"]}
+              defaultOpenKeys={["sub1"]}
+              mode="inline"
+            
             >
-              <SubMenu  key='' title={category.name}>
-                  {category.children.map((children, index) => {
+              <SubMenu key="" title={category.name}>
+                {category.children.map((children, index) => {
                   return (
-                    <Menu.Item key={children._id} > {children.name} </Menu.Item> 
-                  )
-                })} 
+                    <Menu.Item key={children._id}> {children.name} </Menu.Item>
+                  );
+                })}
               </SubMenu>
-              
             </Menu>
-          )
+          );
         })}
       </div>
-    
-      <div className="wrapper">
-            <div className="container">
-                <div className="row g-1">
-                  {products.map( (product , index) => {
-                    return (
-                        <div className="col-md-3" key={index}>
-                            <div className="card p-3">
-                                <div className="text-center">  <a onClick={() => navigate(`${product._id}`)} ><img src={product.img} width={200} /></a> </div>
-                                <div className="product-details"> <del className="font-weight-bold d-block">{ product.price } VNĐ</del> <span className="font-weight-bold d-block">{product.sale ? ( product.price  * ( (100 - product.sale) /100 )) : product.price} VNĐ</span> <span>{product.name}</span>
-                                    <div className="buttons d-flex flex-row">
-                                        <div className="cart"><i className="fa fa-shopping-cart"></i></div> <button className="btn btn-success cart-button btn-block"><span className="dot">1</span>Add to cart </button>
-                                    </div>
-                                    <div className="weight"> <small>{product.sale} %</small> </div>
-                                </div>
-                            </div>
-                        </div>  
-                    )
-                  })}
-                    
-                    
-                    
-                </div>
+
+      <div class="container bg-white">
+        <nav class="navbar navbar-expand-md navbar-light bg-white">
+          <div class="container-fluid p-0">
+            {" "}
+            <a class="navbar-brand text-uppercase fw-800" href="/product">
+              <span class="border-red pe-2">Sản </span>phẩm
+            </a>{" "}
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#myNav"
+              aria-controls="myNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              {" "}
+              <span class="fas fa-bars"></span>{" "}
+            </button>
+            <div class="collapse navbar-collapse" id="myNav">
+              <div class="navbar-nav ms-auto">
+              
+              </div>
             </div>
+          </div>
+        </nav>
+
+        <div class="row">
+          {products.map((product, index) => {
+            return (
+              <div class="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+                <div class="product">
+                  {" "}
+                  <a onClick={ () => navigate(`${product._id}`)}>
+                    <img src={product.img} alt="" />
+                  </a>
+                  <ul class="d-flex align-items-center justify-content-center list-unstyled icons">
+                    <li class="icon">
+                      <LinkOutline color={"#00000"} />
+                    </li>
+                    <li class="icon mx-3">
+                      <HeartOutline color={"#00000"} />
+                    </li>
+                    <li class="icon">
+                      <CartOutline color={"#00000"} />
+                    </li>
+                  </ul>
+                </div>
+                {product.sale ? (
+                  <div class="tag bg-red">{product.sale}%</div>
+                ) : null}
+                <div class="title pt-4 pb-1">{product.name}</div>
+                <div class="d-flex align-content-center justify-content-center">
+                  {" "}
+                  <span class="fas fa-star"></span>{" "}
+                  <span class="fas fa-star"></span>{" "}
+                  <span class="fas fa-star"></span>{" "}
+                  <span class="fas fa-star"></span>{" "}
+                  <span class="fas fa-star"></span>{" "}
+                </div>
+                <div class="price">{numberFormat.format(product.price)}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
-    
-    
-  )
-}
+    </div>
+  );
+};
 
-export default ProductPage
+export default ProductPage;

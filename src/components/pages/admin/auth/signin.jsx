@@ -7,10 +7,10 @@ const { Title} = Typography;
 const SignInPageAdmin = () => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
-    const [formLayout, setFormLayout] = useState('horizontal');
+    const [formLayout] = useState('horizontal');
     
     const onFinish = (data) => {
-        dispatch(signIn(data));
+        dispatch(signIn(data))
     }
     const formItemLayout =
     formLayout === 'horizontal'

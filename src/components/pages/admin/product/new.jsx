@@ -7,18 +7,22 @@ import { addProducts } from './productSlice';
 import { Form } from 'antd';
 import { useState } from 'react';
 import { getCategories } from '../category/categorySlice';
-import '../../../../App.css'
+import '../../../../App.css';
+import { TreeSelect } from 'antd';
 const { Title } = Typography;
-
+let category = {};
 const NewProductPageManager = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
+  const onChange = value => {
+    category = value;
+  };
   const onSubmit = data =>{
+    data = {...data,category}
     dispatch(addProducts(data));
   }
   
   const categories = useSelector(data => data.category.value);
-  
   useEffect(()=> {
     dispatch(getCategories());
   } , [dispatch])
@@ -28,6 +32,25 @@ const NewProductPageManager = () => {
   const onFormLayoutChange = ({ layout }) => {
     setFormLayout(layout);
   };
+
+
+  
+  const treeData1 = [
+    categories.categoryList?.map((category) => {
+      return {
+        value : category._id,
+        title :  category.name,
+        children : category.children.map((children) => {
+          return {
+            value : children._id,
+            title :  children.name,
+          }
+        })
+      }
+    })
+  ]
+  const treeData = treeData1[0];
+
   const formItemLayout =
     formLayout === 'horizontal'
       ? {
@@ -90,14 +113,16 @@ const NewProductPageManager = () => {
                         placeholder="Nhập mô tả sản phẩm vào đây ...">
               </textarea>
             </Form.Item>
-            {/* <Form.Item label="Chọn loại hàng" rules={[{ required: true }]}>
-              <select className='ant-input' {...register('category')}>
-                {categories?.map((category,index)=> 
-                <option key={index} value={category._id} 
-                        className='ant-input' >{category.name}
-                </option>)}
-              </select>
-            </Form.Item> */}
+            <Form.Item label="Loại hàng" rules={[{ required: true }]}>
+              <TreeSelect
+                style={{ width: '100%' }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeData={treeData}
+                placeholder="Nhấn vào để chọn loại hàng"
+                treeDefaultExpandAll
+                onChange={onChange}
+              />
+            </Form.Item>
             
             <Form.Item {...buttonItemLayout}>
               <button className='ant-btn ant-btn-primary'>Đồng ý</button>

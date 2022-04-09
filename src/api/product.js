@@ -5,8 +5,21 @@ import { instance } from "./instance";
 const {token , user} = isAuth();
 
 
-export const list = () =>{
-    const url = "/product";
+export const list = (q_limit) =>{
+    if(q_limit){
+        const url = `/product?limit=${q_limit}`;
+        return instance.get(url);
+    }
+    const url = `/product`;
+    return instance.get(url);
+    
+}
+export const listByCategory = (q_category) => {
+    if( q_category){
+        const url = `/product?category=${q_category}`;
+        return instance.get(url);
+    }
+    const url = `/product`;
     return instance.get(url);
 }
 export const add = product =>{

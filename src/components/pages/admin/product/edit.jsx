@@ -1,4 +1,4 @@
-import { Breadcrumb} from 'antd'
+import { Breadcrumb, TreeSelect} from 'antd'
 import React, { useEffect } from 'react'
 import { Typography} from 'antd';
 import { useForm } from "react-hook-form";
@@ -11,22 +11,49 @@ import '../../../../App.css'
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
-
+let category = {};
 const EditProductManager = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit , reset } = useForm();
+  const onChange = value => {
+    category = value;
+    console.log(category);
+  };
   const onSubmit = data =>{
+    data = {...data,category}
     dispatch(updateProduct(data))
     .then(()=>  navigate("/admin/product" )
     )
   }
-  const {id} = useParams();
-
   const categories = useSelector(data => data.category.value);
-  
-  const product = useSelector( data => data.product.value);
 
+
+  const treeData1 = [
+    categories.categoryList?.map((category) => {
+      return {
+        value : category._id,
+        title :  category.name,
+        children : category.children.map((children) => {
+          return {
+            value : children._id,
+            title :  children.name,
+          }
+        })
+      }
+    })
+  ]
+  const treeData = treeData1[0];
+
+  const {id} = useParams();
+  const product = useSelector( data => data.product.detail);
+
+  categories.categoryList?.map( (item) => { 
+    const categoryName = item.children.filter(category => category._id === product.category)
+    if(categoryName.length > 0){
+      category = categoryName[0];
+    }
+  })
   useEffect(()=>{
       reset(product);
   }, [product, reset])
@@ -106,13 +133,15 @@ const EditProductManager = () => {
                         placeholder="Nhập mô tả sản phẩm vào đây ...">
               </textarea>
             </Form.Item>
-            <Form.Item label="Chọn loại hàng" rules={[{ required: true }]}>
-              <select className='ant-input' >
-                {categories.categoryList?.map((category,index)=> 
-                <option key={index} value={category._id} 
-                        className='ant-input' >{category.name}
-                </option>)}
-              </select>
+            <Form.Item label="Loại hàng" rules={[{ required: true }]}>
+              <TreeSelect
+                style={{ width: '100%' }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeData={treeData}
+                placeholder={category.name}
+                treeDefaultExpandAll
+                onChange={onChange}
+              />
             </Form.Item>
             
             <Form.Item {...buttonItemLayout}>

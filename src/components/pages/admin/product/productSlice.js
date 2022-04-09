@@ -1,14 +1,20 @@
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
-import { add, list, read, remove, update } from "../../../../api/product";
+import { add, list, listByCategory, read, remove, update } from "../../../../api/product";
 
 export const getProducts = createAsyncThunk(
     "product/getProducts",
-    async () => {
-        const {data} = await list();
+    async (q_limit) => {
+        const {data} = await list(q_limit);
         return data;
     }
 )
-
+export const getProductsByCategory = createAsyncThunk(
+    "product/getProductsByCategory",
+    async (q_category) => {
+        const {data} = await listByCategory(q_category);
+        return data;
+    }
+)
 export const addProducts = createAsyncThunk(
     "product/addProducts",
     async (product) => {
@@ -53,6 +59,9 @@ const ProductSlice = createSlice({
         builder.addCase(getProducts.fulfilled , (state , action) => {
             state.value = action.payload;
             console.log('products');
+        } );
+        builder.addCase(getProductsByCategory.fulfilled , (state , action) => {
+            state.value = action.payload;
         } );
         builder.addCase(removeProduct.fulfilled , (state, action) =>{
             state.value = action.payload;

@@ -1,12 +1,7 @@
-import React from 'react'
 import { Button, Carousel } from 'antd';
-
-
 function onChange(a, b, c) {
   console.log(a, b, c);
 }
-
-
 const contentBanner = [
   {
     id: "abc",
@@ -24,14 +19,17 @@ const contentBanner = [
     desc : "Không làm có ăn thì ăn cám Không làm có ăn thì ăn cám  Không làm có ăn thì ăn cám ",
   }
 ]
+
+
 const HomePage = () => {
+
   return (
     <div className='heroBlock'>
        <Carousel afterChange={onChange}>
-          {contentBanner.map(banner => {
+          {contentBanner.map((banner, index) => {
             return (
-              <div className='container-custom'>
-                  <div className='content'>
+              <div className='container-custom' key={index}>
+                  <div className='content' >
                     <h3>{banner.title}</h3>
                     <p>{banner.desc}</p>
                     <div className='btnHolder'>
