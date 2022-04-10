@@ -1,31 +1,50 @@
 import { Breadcrumb} from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Typography} from 'antd';
 import { useForm } from "react-hook-form";
-import { useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form } from 'antd';
 import { useState } from 'react';
-import {  newCatgeories } from '../category/categorySlice';
+import { getCategories, newCatgeories } from '../category/categorySlice';
 import '../../../../App.css';
-import { useNavigate } from 'react-router-dom';
+import { TreeSelect } from 'antd';
 const { Title } = Typography;
-const NewCategoryPageManager = () => {
+let categoryId = {};
+const NewSubCategoryPageManager = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
-  const navigate = useNavigate();
+  const onChange = value => {
+    categoryId = value;
+  };
   const onSubmit = data =>{
-    data = {...data}
-    dispatch(newCatgeories(data))
-    .then( () => {
-        navigate('/admin/category')
-    })
+    data = {...data,categoryId}
+  
+    dispatch(newCatgeories(data));
   }
   
+  const categories = useSelector(data => data.category.value);
+  useEffect(()=> {
+    dispatch(getCategories());
+  } , [dispatch])
+
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState('horizontal');
   const onFormLayoutChange = ({ layout }) => {
     setFormLayout(layout);
   };
+
+
+  
+  const treeData1 = [
+    categories.categoryList?.map((category) => {
+      return {
+        value : category.idC,
+        title :  category.name,
+      }
+    })
+  ]
+  const treeData = treeData1[0];
+
   const formItemLayout =
     formLayout === 'horizontal'
       ? {
@@ -66,6 +85,17 @@ const NewCategoryPageManager = () => {
             onValuesChange={onFormLayoutChange}
             onFinish={handleSubmit(onSubmit)}
           >
+            
+            <Form.Item label="Loại hàng" rules={[{ required: true }]}>
+              <TreeSelect
+                style={{ width: '100%' }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeData={treeData}
+                placeholder="Nhấn vào để chọn loại hàng"
+                treeDefaultExpandAll
+                onChange={onChange}
+              />
+            </Form.Item>
             <Form.Item label="Tên">
               <input  {...register('name')} type="text" className='ant-input'
                       placeholder="Nhập tên loại ..."
@@ -80,4 +110,4 @@ const NewCategoryPageManager = () => {
   )
 }
 
-export default NewCategoryPageManager
+export default NewSubCategoryPageManager

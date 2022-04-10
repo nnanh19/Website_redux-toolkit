@@ -21,6 +21,10 @@ import SignInPageSite from './components/pages/site/auth/signin';
 import SignUpPageSite from './components/pages/site/auth/signup';
 import CategoryPageManager from './components/pages/admin/category';
 import SubCategoryPageManager from './components/pages/admin/category/subCate';
+import NewCategoryPageManager from './components/pages/admin/category/new';
+import NewSubCategoryPageManager from './components/pages/admin/category/newSub';
+import EditSubCategoryPageManager from './components/pages/admin/category/editSub';
+import EditCategoryPageManager from './components/pages/admin/category/edit';
 
 function App() {
   return (
@@ -81,6 +85,36 @@ function App() {
                 </PrivateRouteIsAdmin>
                 </PrivateRouteIsAuth>
               }/>
+              <Route path="category/new" element={
+                <PrivateRouteIsAuth>
+                <PrivateRouteIsAdmin>
+                  <NewCategoryPageManager />
+                </PrivateRouteIsAdmin>
+                </PrivateRouteIsAuth>
+              }/>
+              <Route path="category/newsub/:id" element={
+                <PrivateRouteIsAuth>
+                <PrivateRouteIsAdmin>
+                  <NewSubCategoryPageManager />
+                </PrivateRouteIsAdmin>
+                </PrivateRouteIsAuth>
+              }/>
+              <Route path="category/:id/edit" element={
+                <PrivateRouteIsAuth>
+                <PrivateRouteIsAdmin>
+                  <EditCategoryPageManager />
+                </PrivateRouteIsAdmin>
+                </PrivateRouteIsAuth>
+              }/>
+              <Route path="category/:id/editsub" element={
+                <PrivateRouteIsAuth>
+                <PrivateRouteIsAdmin>
+                  <EditSubCategoryPageManager />
+                </PrivateRouteIsAdmin>
+                </PrivateRouteIsAuth>
+              }/>
+
+              
 
               <Route path="signup" element={<SignUpPageAdmin /> }/>
               <Route path="signin" element={<SignInPageAdmin /> }/>
