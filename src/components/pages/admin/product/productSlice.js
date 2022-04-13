@@ -27,7 +27,7 @@ export const updateProduct = createAsyncThunk (
     async (product) => {
         update(product); 
         const {data} = await list();
-        return data;
+        console.log(data);
     }
 )
 
@@ -56,10 +56,12 @@ const ProductSlice = createSlice({
         detail : [],
     },
     extraReducers : (builder) =>{
+
         builder.addCase(getProducts.fulfilled , (state , action) => {
             state.value = action.payload;
             console.log('products');
         } );
+        
         builder.addCase(getProductsByCategory.fulfilled , (state , action) => {
             state.value = action.payload;
         } );
@@ -70,10 +72,12 @@ const ProductSlice = createSlice({
             state.detail = action.payload;
             console.log('detproduct',action.payload);
         })
+   
         builder.addCase(updateProduct.fulfilled, (state, action) => {
             state.value = action.payload;
             console.log('update',state.value);
         })
+        
         
     }
 });

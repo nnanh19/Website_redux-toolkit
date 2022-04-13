@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { getCategories, newCatgeories } from '../category/categorySlice';
 import '../../../../App.css';
 import { TreeSelect } from 'antd';
+import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 let categoryId = {};
 const NewSubCategoryPageManager = () => {
@@ -16,10 +17,12 @@ const NewSubCategoryPageManager = () => {
   const onChange = value => {
     categoryId = value;
   };
+  const navigate = useNavigate();
   const onSubmit = data =>{
     data = {...data,categoryId}
   
-    dispatch(newCatgeories(data));
+    dispatch(newCatgeories(data))
+    .then(navigate('/admin/category'))
   }
   
   const categories = useSelector(data => data.category.value);

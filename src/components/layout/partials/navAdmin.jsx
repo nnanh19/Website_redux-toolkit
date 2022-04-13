@@ -29,7 +29,7 @@ const NavAdmin = () => {
             <Menu.Item key="6"><a href="/admin/product/new">Thêm mới</a></Menu.Item>
         </SubMenu> */}
         <Menu.Item key="10" icon={<FileOutlined />}>
-            <a href="/admin/product">Người Dùng</a>
+            <a href="/admin/user">Người Dùng</a>
         </Menu.Item>
         <Menu.Item key="8" icon={<FileOutlined />}>
             <a href="/admin/product">Sản Phẩm</a>

@@ -1,10 +1,18 @@
 import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import { signup } from "../../../../api/user";
+import { list, signup } from "../../../../api/user";
 import { signin } from "../../../../api/user";
 
+export const getUsers = createAsyncThunk(
+    "auth/getUsers",
+    async () => {
+        const {data} = await list();
+        return data;
+    },
+)
 export const signUp = createAsyncThunk(
     "auth/signup",
     async (user) => {
+        console.log(user);
         await signup(user);
     },
 )
@@ -33,6 +41,7 @@ export const user = createAsyncThunk(
 const authSlice = createSlice({
     name : 'auth',
     initialState : {
+        users : [],
         isLogged : false,
         user : {}
     },
@@ -45,6 +54,9 @@ const authSlice = createSlice({
         builder.addCase(logOut.fulfilled, (state, action) => {
             state.isLogged = false;
             localStorage.removeItem('user');
+        })
+        builder.addCase(getUsers.fulfilled, (state, action) => {
+            state.users = action.payload;
         })
     }
     }

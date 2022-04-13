@@ -20,7 +20,7 @@ const HeaderSite = () => {
   const dispatch = useDispatch();
   
 
-  const data = useSelector(data => data.auth)
+  const data = useSelector(data => data.auth.isLogged)
   useEffect( () =>{
     dispatch(user())    
   } , [dispatch])
@@ -43,7 +43,14 @@ const HeaderSite = () => {
     <div className="container-custom">
       <div>
         <div className="top-header">
-          { !data.isLogged ? (
+          { localStorage.getItem('user') ? (
+            <div>
+               <Select defaultValue="Hello"  style={{ width: 120}} onChange={handleChange}>
+                <Option value="infoUser"><PeopleOutline color={"#00000"}/>Tài khoản</Option>
+                <Option value="logout"><LogOutOutline  color={"#00000"} />Đăng xuất</Option>
+              </Select>
+            </div>
+          ) :   (
             <div>
               {" "}
               <a href="/signin">
@@ -51,14 +58,7 @@ const HeaderSite = () => {
                 <PeopleOutline color={"#00000"} />
               </a>
             </div>
-          ) : (
-            <div>
-               <Select defaultValue="Hello"  style={{ width: 120}} onChange={handleChange}>
-                <Option value="infoUser"><PeopleOutline color={"#00000"}/>Tài khoản</Option>
-                <Option value="logout"><LogOutOutline  color={"#00000"} />Đăng xuất</Option>
-              </Select>
-            </div>
-          )}
+          ) }
 
           <div>
             <a href="/my-cart">

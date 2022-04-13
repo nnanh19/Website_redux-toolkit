@@ -9,17 +9,38 @@ import { useState } from 'react';
 import { getCategories } from '../category/categorySlice';
 import '../../../../App.css';
 import { TreeSelect } from 'antd';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 let category = {};
 const NewProductPageManager = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const onChange = value => {
     category = value;
   };
-  const onSubmit = data =>{
-    data = {...data,category}
-    dispatch(addProducts(data));
+  const formData = new FormData();
+  const API = 'https://api.cloudinary.com/v1_1/ph-th/image/upload';
+  const preset = 'rjbb3yjz';
+
+  let imgHide = document.querySelector('#imgHide');
+  const onChangeImg = e => {
+    imgHide.src = URL.createObjectURL(e.target.files[0])
+    formData.append('file' , e.target.files[0] );
+    formData.append('upload_preset', preset );
+  }
+  let img = {};
+  const onSubmit = product =>{
+    axios.post(API, formData)
+    .then(data =>{
+      img = data.data.url;
+      product = {...product,category, img}
+      dispatch(addProducts(product))
+      .then(navigate("/admin/product" ))
+    })
+    
+   
   }
   
   const categories = useSelector(data => data.category.value);
@@ -107,6 +128,13 @@ const NewProductPageManager = () => {
               <input  {...register('sale')} type="number" className='ant-input'
                         placeholder="Nhập khuyến mãi sản phẩm vào đây ..."
               />
+            </Form.Item>
+            <Form.Item label="Hình ảnh">
+              <input onChange={onChangeImg}   type="file" className='ant-input'
+                        placeholder="Nhập khuyến mãi sản phẩm vào đây ..."
+              />
+              <img width={50} class="w-20"
+                                        id="imgHide" />
             </Form.Item>
             <Form.Item label="Mô tả">
               <textarea   {...register('desc')}className='ant-input'

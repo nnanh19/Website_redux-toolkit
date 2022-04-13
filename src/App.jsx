@@ -25,6 +25,7 @@ import NewCategoryPageManager from './components/pages/admin/category/new';
 import NewSubCategoryPageManager from './components/pages/admin/category/newSub';
 import EditSubCategoryPageManager from './components/pages/admin/category/editSub';
 import EditCategoryPageManager from './components/pages/admin/category/edit';
+import UserPageManager from './components/pages/admin/auth/user';
 
 function App() {
   return (
@@ -114,8 +115,7 @@ function App() {
                 </PrivateRouteIsAuth>
               }/>
 
-              
-
+              <Route path="user" element={<UserPageManager /> }/>
               <Route path="signup" element={<SignUpPageAdmin /> }/>
               <Route path="signin" element={<SignInPageAdmin /> }/>
           </Route>

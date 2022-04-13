@@ -1,54 +1,73 @@
 import React, { useState } from 'react'
-import { Form, Input, Button } from 'antd';
+import { Form } from 'antd';
 import { Typography } from 'antd';
 import { useDispatch } from 'react-redux';
+import { useForm} from 'react-hook-form';
 import { signUp } from './authSlice';
+import axios from 'axios';
 const { Title} = Typography;
 const SignUpPageAdmin = () => {
     const dispatch = useDispatch();
-    const [form] = Form.useForm();
-    const [formLayout, setFormLayout] = useState('horizontal');
 
-    const onFinish = (data) => {
-        dispatch(signUp(data));
+    const [formLayout] = useState('horizontal');
+    const { register, handleSubmit} = useForm();
+    const formData = new FormData();
+   const onChange  = async e =>{
+       
+       formData.append('file', e.target.files[0]);
+       formData.append('upload_preset', preset);
+       
     }
-    const formItemLayout =
-    formLayout === 'horizontal'
-      ? {
-          labelCol: { span: 8 },
-          wrapperCol: { span: 8 },
-        }
-      : null;
 
+    const API = 'https://api.cloudinary.com/v1_1/ph-th/image/upload';
+    const preset = 'rjbb3yjz';
+
+    const onSubmit = async ()=> {
+        const {data} = await axios.post(API, formData)
+        console.log(data.url);
+    }
+ 
+    // const formItemLayout =
+    // formLayout === 'horizontal'
+    //   ? {
+    //       labelCol: { span: 8 },
+    //       wrapperCol: { span: 8 },
+    //     }
+    //   : null;
+    
   const buttonItemLayout =
     formLayout === 'horizontal'
       ? {
           wrapperCol: { span: 8, offset: 8 },
         }
       : null;
-    
   return (
       <>
       <Title level={2}>Đăng ký</Title>
-    <Form form={form} onFinish={onFinish} {...formItemLayout}>
-
-        <Form.Item name='username' label='Name' rules={[
+   <form action="" encType='multipart/form-data' method='post' onSubmit={handleSubmit(onSubmit)}  >
+        <Form.Item label='Name' rules={[
             {
                 required :true,
                 message : 'Bạn cần nhập username'
             }
         ]}> 
-            <Input placeholder='Nhập username vào đây ...'/>
+            <input 
+            className='ant-input' type="text" placeholder='Nhập username vào đây ...'/>
         </Form.Item>
 
-        <Form.Item name='email' label='Email' rules={[
+        <Form.Item  label='Email'  rules={[
             {
                 required :true,
                 message : 'Bạn cần nhập email',
-                type : 'email'
             }
         ]}> 
-            <Input placeholder='Nhập email vào đây ...'/>
+             <input 
+            className='ant-input' type="text" placeholder='Nhập email vào đây ...'/>
+        </Form.Item>
+
+        <Form.Item onChange={onChange} >
+            <input 
+            className='ant-input' type="file"/>
         </Form.Item>
 
         <Form.Item  name='password' label='Password' rules={[
@@ -57,15 +76,16 @@ const SignUpPageAdmin = () => {
                 message : 'Bạn cần nhập password',
             }
         ]}> 
-            <Input.Password placeholder='Nhập password vào đây ...'/>
+            <input 
+            className='ant-input' type="text" placeholder='Nhập password vào đây ...'/>
         </Form.Item>
 
+      
+
         <Form.Item {...buttonItemLayout}>
-            <Button type='primary' htmlType='submit'>
-                Đăng ký
-            </Button>
+            <button className='btn btn-success'>Gửi</button>
         </Form.Item>
-    </Form>
+    </form>
     </>
   )
 }

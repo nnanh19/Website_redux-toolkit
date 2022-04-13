@@ -3,13 +3,14 @@ import React, { useEffect } from 'react'
 import { Typography} from 'antd';
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import { detailProduct, updateProduct } from './productSlice';
+import {  detailProduct, updateProduct } from './productSlice';
 import { Form } from 'antd';
 import { useState } from 'react';
 import { getCategories } from '../category/categorySlice';
 import '../../../../App.css'
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 const { Title } = Typography;
 let category = {};
 const EditProductManager = () => {
@@ -20,12 +21,30 @@ const EditProductManager = () => {
     category = value;
     console.log(category);
   };
-  const onSubmit = data =>{
-    data = {...data,category}
-    dispatch(updateProduct(data))
-    .then(()=>  navigate("/admin/product" )
-    )
+
+  const formData = new FormData();
+  const API = 'https://api.cloudinary.com/v1_1/ph-th/image/upload';
+  const preset = 'rjbb3yjz';
+
+  let imgHide = document.querySelector('#imgHide');
+  const onChangeImg = e => {
+    imgHide.src = URL.createObjectURL(e.target.files[0])
+    formData.append('file' , e.target.files[0] );
+    formData.append('upload_preset', preset );
   }
+  let img = {};
+  const onSubmit = product =>{
+    axios.post(API, formData)
+
+    .then(data =>{
+      img = data.data.url;
+      product = {...product,category, img}
+      dispatch(updateProduct(product))
+      .then(()=>  navigate("/admin/product" ))
+    })
+  }
+
+
   const categories = useSelector(data => data.category.value);
 
 
@@ -54,6 +73,7 @@ const EditProductManager = () => {
       category = categoryName[0];
     }
   })
+  
   useEffect(()=>{
       reset(product);
   }, [product, reset])
@@ -127,6 +147,15 @@ const EditProductManager = () => {
               <input  {...register('sale')} type="number" className='ant-input'
                         placeholder="Nhập khuyến mãi sản phẩm vào đây ..."
               />
+            </Form.Item>
+            <Form.Item label="Hình ảnh">
+              <input onChange={onChangeImg}   type="file" className='ant-input'
+                        placeholder="Nhập khuyến mãi sản phẩm vào đây ..."
+              />
+              <img width={50} class="w-20"
+                                        id="imgHide" />
+              {/* <img width={50} class="w-20" src="http://res.cloudinary.com/ph-th/image/upload/v1645176656/f67vguycjxymtm8dctt4.gif"
+                                        id="imgHide" /> */}
             </Form.Item>
             <Form.Item label="Mô tả">
               <textarea   {...register('desc')}className='ant-input'
