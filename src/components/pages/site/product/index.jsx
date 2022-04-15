@@ -1,5 +1,5 @@
 import { Menu } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { getCategories } from "../../admin/category/categorySlice";
@@ -19,25 +19,52 @@ const { Title } = Typography;
 const ProductPage = () => {
   const navigate = useNavigate();
 
+
   const categories = useSelector((data) => data.category.value);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
-
+  
   const products = useSelector((data) => data.product.value);
   let params = new URL(document.location).searchParams;
-  const q_limit = params.get("limit");
+  // const q_limit = params.get("limit");
+  const q_page = params.get("page");
+  
   useEffect(() => {
-    dispatch(getProducts(q_limit));
-  }, [dispatch, q_limit]);
+    dispatch(getProducts({q_page:1}));
+  }, [dispatch, q_page]);
 
   const handleClick = (e) => {
     console.log('ev,',e);
     dispatch(getProductsByCategory(e.key));
   };
-  console.log('cate',categories.categoryList);
+
+
+  var currentPage = 1;
+
+  const handlerNext = () =>{
+    currentPage++;
+    if(currentPage >= 4){
+      currentPage = 4
+    }
+    dispatch(getProducts({q_page : currentPage}));
+  }
+  const handlerPrev = () =>{
+    currentPage--;
+    if(currentPage === 0){
+      currentPage = 1
+    }
+    
+    dispatch(getProducts({q_page : currentPage}));
+  }
+
+  const loadPage = (page) =>{
+    currentPage = page;
+    dispatch(getProducts({q_page : page}));
+  }
+
   return (
     <div className="container-product">
       <div className="category-product">
@@ -47,13 +74,13 @@ const ProductPage = () => {
 
         {categories.categoryList?.map((category, index) => {
           return (
-            <Menu
+            <Menu key={index}
               onClick={handleClick}
               style={{ width: 256 }}
               defaultSelectedKeys={["1"]}
               defaultOpenKeys={["sub1"]}
               mode="inline"
-            
+              
             >
               <SubMenu key="" title={category.name}>
                 {category.children.map((children, index) => {
@@ -67,15 +94,15 @@ const ProductPage = () => {
         })}
       </div>
 
-      <div class="container bg-white">
-        <nav class="navbar navbar-expand-md navbar-light bg-white">
-          <div class="container-fluid p-0">
+      <div className="container bg-white">
+        <nav className="navbar navbar-expand-md navbar-light bg-white">
+          <div className="container-fluid p-0">
             {" "}
-            <a class="navbar-brand text-uppercase fw-800" href="/product">
-              <span class="border-red pe-2">Sản </span>phẩm
+            <a className="navbar-brand text-uppercase fw-800" href="/product">
+              <span className="border-red pe-2">Sản </span>phẩm
             </a>{" "}
             <button
-              class="navbar-toggler"
+              className="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#myNav"
@@ -84,55 +111,69 @@ const ProductPage = () => {
               aria-label="Toggle navigation"
             >
               {" "}
-              <span class="fas fa-bars"></span>{" "}
+              <span className="fas fa-bars"></span>{" "}
             </button>
-            <div class="collapse navbar-collapse" id="myNav">
-              <div class="navbar-nav ms-auto">
+            <div className="collapse navbar-collapse" id="myNav">
+              <div className="navbar-nav ms-auto">
               
               </div>
             </div>
           </div>
         </nav>
 
-        <div class="row">
+        <div className="row">
           {products.map((product, index) => {
             return (
-              <div class="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
-                <div class="product">
+              <div key={index} className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+                <div className="product" >
                   {" "}
                   <a onClick={ () => navigate(`${product._id}`)}>
                     <img src={product.img} alt="" />
                   </a>
-                  <ul class="d-flex align-items-center justify-content-center list-unstyled icons">
-                    <li class="icon">
+                  <ul className="d-flex align-items-center justify-content-center list-unstyled icons">
+                    <li className="icon">
                       <LinkOutline color={"#00000"} />
                     </li>
-                    <li class="icon mx-3">
+                    <li className="icon mx-3">
                       <HeartOutline color={"#00000"} />
                     </li>
-                    <li class="icon">
+                    <li className="icon">
                       <CartOutline color={"#00000"} />
                     </li>
                   </ul>
                 </div>
                 {product.sale ? (
-                  <div class="tag bg-red">{product.sale}%</div>
+                  <div className="tag bg-red">{product.sale}%</div>
                 ) : null}
-                <div class="title pt-4 pb-1">{product.name}</div>
-                <div class="d-flex align-content-center justify-content-center">
+                <div className="title pt-4 pb-1">{product.name}</div>
+                <div className="d-flex align-content-center justify-content-center">
                   {" "}
-                  <span class="fas fa-star"></span>{" "}
-                  <span class="fas fa-star"></span>{" "}
-                  <span class="fas fa-star"></span>{" "}
-                  <span class="fas fa-star"></span>{" "}
-                  <span class="fas fa-star"></span>{" "}
+                  <span className="fas fa-star"></span>{" "}
+                  <span className="fas fa-star"></span>{" "}
+                  <span className="fas fa-star"></span>{" "}
+                  <span className="fas fa-star"></span>{" "}
+                  <span className="fas fa-star"></span>{" "}
                 </div>
-                <div class="price">{numberFormat.format(product.price)}</div>
+                <div className="price">{numberFormat.format(product.price)}</div>
               </div>
             );
           })}
         </div>
+        
       </div>
+      <div className="paging-product">
+            <nav aria-label="Page navigation example">
+              <ul className="pagination">
+                <li className="page-item"><a className="page-link" href="#" onClick={handlerPrev}>Trước</a></li>
+                <li className="page-item"><a className="page-link" href="#" onClick={() =>{loadPage(1)}}>1</a></li>
+                <li className="page-item"><a className="page-link" href="#" onClick={() =>{loadPage(2)}}>2</a></li>
+                <li className="page-item"><a className="page-link" href="#" onClick={() =>{loadPage(3)}}>4</a></li>
+                <li className="page-item"><a className="page-link" href="#" onClick={() =>{loadPage(4)}}>5</a></li>
+                <li className="page-item"><a className="page-link" href="#" onClick={handlerNext}>Sau</a></li>
+              </ul>
+              
+            </nav>
+        </div>
     </div>
   );
 };

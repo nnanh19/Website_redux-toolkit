@@ -1,10 +1,19 @@
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
-import { add, list, listByCategory, read, remove, update } from "../../../../api/product";
+import { add, list, listByCategory, listSearch, read, remove, update } from "../../../../api/product";
 
 export const getProducts = createAsyncThunk(
     "product/getProducts",
-    async (q_limit) => {
-        const {data} = await list(q_limit);
+    async (query) => {
+        console.log(query);
+        const {data} = await list(query.q_page);
+        return data;
+    }
+)
+export const searchProducts = createAsyncThunk(
+    "product/searchProducts",
+    async (query) => {
+        const value = query.value;
+        const {data} = await listSearch(value);
         return data;
     }
 )
@@ -58,6 +67,10 @@ const ProductSlice = createSlice({
     extraReducers : (builder) =>{
 
         builder.addCase(getProducts.fulfilled , (state , action) => {
+            state.value = action.payload;
+            console.log('products');
+        } );
+        builder.addCase(searchProducts.fulfilled , (state , action) => {
             state.value = action.payload;
             console.log('products');
         } );

@@ -8,6 +8,7 @@ import { CartOutline } from "react-ionicons";
 import { Select } from 'antd';
 import { logOut, user } from "../../pages/admin/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { getProducts, searchProducts } from "../../pages/admin/product/productSlice";
 const { Search } = Input;
 
 
@@ -18,7 +19,7 @@ const { Option } = Select;
 const HeaderSite = () => {
   
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate();
 
   const data = useSelector(data => data.auth.isLogged)
   useEffect( () =>{
@@ -29,7 +30,9 @@ const HeaderSite = () => {
     dispatch(logOut());
   };
 
-  const onSearch = (value) => console.log(value);
+  const onSearch = (value) => {
+    dispatch(searchProducts({ value}))
+  }
 
   function handleChange(value) {
    if(value === "infoUser"){
@@ -38,7 +41,7 @@ const HeaderSite = () => {
       logout()
    }
   }
-  const navigate = useNavigate();
+  
   return (
     <div className="container-custom">
       <div>

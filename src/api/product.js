@@ -5,9 +5,18 @@ import { instance } from "./instance";
 const {token , user} = isAuth();
 
 
-export const list = (q_limit) =>{
-    if(q_limit){
-        const url = `/product?limit=${q_limit}`;
+export const list = (q_page) =>{
+    if(q_page){
+        const url = `/product?page=${q_page}`;
+        return instance.get(url);
+    }
+    const url = `/product`;
+    return instance.get(url);
+    
+}
+export const listSearch = (q_name) =>{
+    if(q_name){
+        const url = `/product?name=${q_name}`;
         return instance.get(url);
     }
     const url = `/product`;

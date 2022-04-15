@@ -13,10 +13,12 @@ function ProductPageManager() {
   const dispatch = useDispatch();
 
   const products = useSelector(data => data.product.value);
+  let params = new URL(document.location).searchParams;
   console.log(products,'pr');
-  useEffect(()=> {
-    dispatch(getProducts());
-  } , [dispatch])
+  const q_page = params.get("page");
+  useEffect(() => {
+    dispatch(getProducts({q_page}));
+  }, [dispatch, q_page]);
 
   const columns = [
     {

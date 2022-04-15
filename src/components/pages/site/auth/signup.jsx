@@ -59,6 +59,7 @@ const SignUpPageSite = () => {
             >
               <Input placeholder="Nhập email vào đây ..." />
             </Form.Item>
+            
 
             <Form.Item
               name="password"
